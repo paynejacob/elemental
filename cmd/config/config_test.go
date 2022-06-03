@@ -166,8 +166,6 @@ var _ = Describe("Config", Label("config"), func() {
 				// From config file
 				Expect(len((*disk)["x86_64"].Packages)).To(Equal(1))
 				Expect((*disk)["x86_64"].Packages[0].Name).To(Equal("system/myos"))
-				Expect(len((*disk)["x86_64"].Repositories)).To(Equal(1))
-				Expect((*disk)["x86_64"].Repositories[0].URI).To(Equal("quay.io/some/repo"))
 			})
 		})
 	})

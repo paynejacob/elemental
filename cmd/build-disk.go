@@ -76,13 +76,23 @@ func NewBuildDisk(root *cobra.Command, addCheckRoot bool) *cobra.Command {
 
 			// Set the repo depending on the arch we are building for
 			var repos []v1.Repository
-			for _, u := range (*spec)[cfg.Arch].Repositories {
+			for _, u := range cfg.Repos {
+				golangArch, err := utils.ArchToGolangArch(cfg.Arch)
+				if err != nil {
+					cfg.Logger.Errorf("invalid arch provided for repository '%s': %s", u.Name, err.Error())
+					return err
+				}
+
+				if u.Arch != "" && u.Arch != golangArch {
+					continue
+				}
+
 				repos = append(repos, v1.Repository{
 					URI:         u.URI,
 					Priority:    constants.LuetDefaultRepoPrio,
 					Name:        u.Name,
 					ReferenceID: u.ReferenceID,
-					Arch:        u.Arch,
+					Arch:        golangArch,
 					Type:        u.Type,
 				})
 			}
